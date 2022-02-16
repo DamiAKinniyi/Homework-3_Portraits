@@ -9,6 +9,7 @@ setInterval(()=>
     landing.style.display = "none",3300)
 
 console.log(landing)
+console.log(document.getElementById('myImage').innerHTML)
 //-------------------------------------------------------------------------//
 //Import Libraries
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.126.0/build/three.module.js'

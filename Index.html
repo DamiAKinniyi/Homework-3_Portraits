@@ -8,27 +8,40 @@
     <link href="style.css" rel="stylesheet">
 </head>
 <body>
+    <div id="container">
+        <div id="loader2" ><p></p></div>
+    </div>
     <div id="container2">
         <div id="controlbox">
             <div class="wrapper">
                <h3 id ="header">Make A Portrait</h3>
             </div>
             <div class="wrapper">
-                <p>Select Sizes</p>
-                <br>
-                <div>
-                    <label for="width">width</label><br>
-                    <input name="width" type="range" step="1"><br>
-                    <label for="height">height</label><br>
-                    <input name="height" type="range"> 
-                </div>
+                <form>
+                    <div>
+                        <label id="select-image-button" for="myImage">Select Image</label>
+                        <input type="file" id="myImage" name="myImage" accept = "image/png, image/jpeg" style="opacity: 0;">
+                    </div>
+                    <div class="image_preview">No Image Selected</div>
+                    
+
+                    <button>Upload Image</button>
+                </form>
+               
             </div>
+
+            <div class="wrapper">
+                <p>Select Sizes</p>                    
+                <label for="width">width</label>
+                <input id="width" name="width" type="range" step="1"><br>
+                <label for="height">height</label>
+                <input name="height" type="range"> 
+            </div>
+            
         </div>
         
     </div>
-    <div id="container">
-        <div id="loader2" ><p></p></div>
-    </div>
+
     <div id="landing-page">
 
         <div id="portraits"><p>P</p></div>
