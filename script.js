@@ -5,10 +5,10 @@ let landing = document.getElementById('landing-page')
 //To set time interval for black background
 //Could have done this with setTimeout()
 setInterval(function(){
-    landing.style.opacity= "0"}, 0)
+    landing.style.opacity= "0"}, 3000)
 //To set time interval to remove landing page
 setInterval(()=>
-    landing.style.display = "none",0)
+    landing.style.display = "none",3300)
 
 //console.log(landing)
 //console.log(document.getElementById('myImage').files)
@@ -76,7 +76,7 @@ height.addEventListener('click', onSliderChange,false)
 height.addEventListener('touchend', onSliderChange,false)
 
 
-const definitionName = 'Portraits.gh';
+const definitionName = 'Portraits 2.gh';
 const loader = new Rhino3dmLoader()
 loader.setLibraryPath('https://cdn.jsdelivr.net/npm/rhino3dm@0.15.0-beta/')
 
@@ -120,7 +120,7 @@ async function compute() {
     trees.push(param2)
 
     const res = await RhinoCompute.Grasshopper.evaluateDefinition(definition, trees)
-    //console.log(res)
+    console.log(res)
         
 
 
@@ -154,6 +154,7 @@ async function compute() {
 
     const buffer = new Uint8Array(doc.toByteArray()).buffer
     loader.parse(buffer, function (object) {
+        //object.rotation.z = Math.PI
 
         scene.add(object)
         console.log(scene)
@@ -183,8 +184,8 @@ function init() {
 
     // create a scene and a camera
     scene = new THREE.Scene()
-    scene.background = new THREE.Color(0, 1, 0)
-    camera = new THREE.PerspectiveCamera(1000, window.innerWidth / window.innerHeight, 0.1, 1000)
+    scene.background = new THREE.Color(1, 1, 1)
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
     camera.position.z=50
 
 
