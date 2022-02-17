@@ -31,15 +31,27 @@
             </div>
 
             <div class="wrapper">
-                <p>Select Sizes</p>                    
+                <p>Image Parameters</p>                    
                 <label for="width">width</label>
-                <input id="width" name="width" type="range" step="1" min="50" max="150"><br>
+                <input id="width" name="width" type="range" step="1" min="30" max="100"><br>
                 <label for="height">height</label>
-                <input name="height" id="height" type="range" step="1" min="50" max="150"> 
+                <input name="height" id="height" type="range" step="1" min="30" max="100"> 
                 <label for="clarity">clarity</label>
-                <input name="clarity" id="clarity" type="range" step="0.01" min="0" max="1"> 
+                <input name="clarity" id="clarity" type="range" step="0.01" min="0.2" max="1"> 
                 <label for="abstraction">abstraction</label>
                 <input name="abstraction" id="abstraction" type="range" step="0.01" min="0" max="1"> 
+            </div>
+            <div class="wrapper">
+                <label>Invert</label>
+                <button alt="0" class="button" id="false">False</button>
+                <button alt="1"class="button" id="true">True</button><br>
+                <label>Pixels</label>
+                <button alt="0"class="button" id="dots">Dots</button>
+                <button alt="1"class="button" id="boxes">Boxes</button><br>
+                <label>Color Mode</label>
+                <button alt="0"class="button" id="monochrome">Monochrome</button>
+                <button alt="1"class="button" id="coloured">Coloured</button>
+
             </div>
             
         </div>

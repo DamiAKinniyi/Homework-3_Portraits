@@ -65,7 +65,7 @@ function validFileType(file) {
 //-----------------------------------------------------------//
 
 //Setup Parameter Sliders-----------------------------------------//
-let width, height;
+let width, height, clarity, abstraction, yay, nay, invert, dots, boxes, pixels, monochrome, coloured, colorMode, holder;
 
 width = document.getElementById("width")
 width.addEventListener('click',  onSliderChange,false)
@@ -74,6 +74,33 @@ width.addEventListener('touchend',  onSliderChange,false)
 height = document.getElementById("height")
 height.addEventListener('click', onSliderChange,false)
 height.addEventListener('touchend', onSliderChange,false)
+
+clarity = document.getElementById("clarity")
+clarity.addEventListener('click', onSliderChange,false)
+clarity.addEventListener('touchend', onSliderChange,false)
+
+abstraction = document.getElementById("abstraction")
+abstraction.addEventListener('click', onSliderChange,false)
+abstraction.addEventListener('touchend', onSliderChange,false)
+
+yay = document.getElementById("true")
+yay.addEventListener("click", onClick, false)
+nay = document.getElementById("false")
+nay.addEventListener("click", onClick)
+invert = 0
+
+dots = document.getElementById("dots")
+dots.addEventListener("click", onClick)
+boxes = document.getElementById("boxes")
+boxes.addEventListener("click", onClick)
+pixels = 0
+
+monochrome = document.getElementById("monochrome")
+monochrome.addEventListener("click", onClick)
+coloured = document.getElementById("coloured")
+coloured.addEventListener("click", onClick)
+colorMode = 0
+
 
 
 const definitionName = 'Portraits 2.gh';
@@ -114,10 +141,41 @@ async function compute() {
     param2.append([0], [height.valueAsNumber])
     console.log(param2)
 
+    const param3 = new RhinoCompute.Grasshopper.DataTree('Image Clarity')
+    param3.append([0], [clarity.valueAsNumber])
+    console.log(param3)
+
+    const param4 = new RhinoCompute.Grasshopper.DataTree('Abstraction')
+    param4.append([0], [abstraction.valueAsNumber])
+    console.log(param4)
+
+    const param5 = new RhinoCompute.Grasshopper.DataTree('Invert Image')
+    param5.append([0],[invert])
+    console.log(param5)
+
+    const param6 = new RhinoCompute.Grasshopper.DataTree('Pixels')
+    param6.append([0],[pixels])
+    console.log(param6)
+
+    const param7 = new RhinoCompute.Grasshopper.DataTree('Color Mode')
+    param7.append([0],[colorMode])
+    console.log(param7)
+
+    console.log(invert)
+    console.log(pixels)
+    console.log(colorMode)
+
     // clear values
     const trees = []
     trees.push(param1)
     trees.push(param2)
+    trees.push(param3)
+    trees.push(param4)
+    trees.push(param5)
+    trees.push(param6)
+    trees.push(param7)
+
+
 
     const res = await RhinoCompute.Grasshopper.evaluateDefinition(definition, trees)
     console.log(res)
@@ -170,6 +228,20 @@ function onSliderChange() {
     document.getElementById('container').style.display = 'flex'
     compute()
 }
+function onClick(e){
+    //show spinner
+    document.getElementById('container').style.display = 'flex';
+    holder = e.target.getAttribute('alt');
+    console.log(holder)
+    if(e.target.id=== "true" || e.target.id=== "false" ){
+        invert = holder
+    }else if(e.target.id=== "dots" || e.target.id=== "boxes"){
+        pixels = holder
+    }else{
+        colorMode = holder
+    }    
+    compute()
+}
 
 
 
@@ -186,7 +258,7 @@ function init() {
     scene = new THREE.Scene()
     scene.background = new THREE.Color(1, 1, 1)
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-    camera.position.z=50
+    camera.position.z=60
 
 
     // create the renderer and add it to the html
