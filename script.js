@@ -189,7 +189,7 @@ async function compute() {
 
     //console.log(invert)
     //console.log(pixels)
-    //console.log(colorMode)
+    console.log(colorMode)
 
     // clear values
     const trees = []
@@ -227,6 +227,23 @@ async function compute() {
             }
         }
     }
+  // go through the objects in the Rhino document
+
+  let objects = doc.objects();
+  //console.log(objects)
+  for ( let i = 0; i < objects.count; i++ ) {
+  
+    const rhinoObject = objects.get( i );
+    //console.log(rhinoObject)
+
+
+     // asign geometry userstrings to object attributes
+    if ( rhinoObject.geometry().userStringCount > 0 ) {
+      const g_userStrings = rhinoObject.geometry().getUserStrings()
+      rhinoObject.attributes().setUserString(g_userStrings[0][0], g_userStrings[0][1])
+      
+    }
+  }
 
 
 
@@ -234,7 +251,24 @@ async function compute() {
 
     const buffer = new Uint8Array(doc.toByteArray()).buffer
     loader.parse(buffer, function (object) {
-        //object.rotation.z = Math.PI
+        //object.rotation.z = Math.PI (Work on image rotation to keep portrait or landscape)
+
+        object.traverse((child) => {
+            if (child.isLine) {
+      
+              if (child.userData.attributes.geometry.userStringCount > 0) {
+                
+                //get color from userStrings
+                const colorData = child.userData.attributes.userStrings[0]
+                const col = colorData[1];
+      
+                //convert color from userstring to THREE color and assign it
+                const threeColor = new THREE.Color("rgb(" + col + ")");
+                const mat = new THREE.LineBasicMaterial({ color: threeColor });
+                child.material = mat;
+              }
+            }
+          });
 
         scene.add(object)
         //console.log(scene)
@@ -243,7 +277,7 @@ async function compute() {
 
     })
 }
-
+// EVENT DEFINITIONS----------------------------------//
 
 function onSliderChange() {
     // show spinner
@@ -253,6 +287,7 @@ function onSliderChange() {
 function onClick(e){
     //show spinner
     document.getElementById('container').style.display = 'flex';
+
     holder = e.target.getAttribute('alt');
     console.log(holder)
     if(e.target.id=== "true" || e.target.id=== "false" ){
@@ -265,9 +300,10 @@ function onClick(e){
     compute()
 }
 
-async function onSend(){
+function onSend(){
     //show spinner
     document.getElementById('container').style.display = 'flex';
+
     if (image.files && image.files[0]) {
         var fileSize;
         reader = new FileReader();
