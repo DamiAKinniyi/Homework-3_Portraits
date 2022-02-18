@@ -111,6 +111,7 @@ div>#controlbox{
     margin:0px;
     padding:7% 1%;
     display:block;
+    font-size: 13px;
     
 }
 
@@ -130,7 +131,7 @@ p{
     display:flex;
 }
 
-#select-image-button{
+.select-image-button{
     background-color: black;
     color: rgb(255, 255, 255);
     width:50%;

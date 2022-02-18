@@ -24,7 +24,7 @@ import { Rhino3dmLoader } from 'https://cdn.jsdelivr.net/npm/three@0.124.0/examp
 //Set up Slider Events
 //Declare sliders//
 //Set up Image Selection and Preview--------------------------------------//
-let image;
+let image, image2, reader, dataUri;
 image = document.getElementById("myImage")
 const imagePreview = document.getElementsByClassName("image_preview")[0];
 image.addEventListener('change', imageChange);
@@ -45,16 +45,20 @@ function imageChange(){
     }else{
         alert('you have changed the image')
         updateImageDisplay()
-    }   
+    }  
+    send.disabled = false
+     
 }
 
 function updateImageDisplay(){
     
-    let image2 = document.createElement('img');
+    image2 = document.createElement('img');
     imagePreview.appendChild(image2);
     if(validFileType(image.files[0])){
         image2.src=URL.createObjectURL(image.files[0])}
+        console.log(image.files[0])
         image2.alt= image.files[0].name
+        console.log(image2)
 
 }
 const fileTypes = ["image/png", "image/jpeg"];
@@ -62,10 +66,17 @@ const fileTypes = ["image/png", "image/jpeg"];
 function validFileType(file) {
     return fileTypes.includes(file.type);
   }
+
+let send = document.getElementById('submit');
+send.addEventListener("click", onSend);
+
+
+
 //-----------------------------------------------------------//
 
 //Setup Parameter Sliders-----------------------------------------//
-let width, height, clarity, abstraction, yay, nay, invert, dots, boxes, pixels, monochrome, coloured, colorMode, holder;
+let width, height, clarity, abstraction, yay, nay, invert, dots, boxes, pixels, monochrome, coloured, colorMode, holder, filepath;
+
 
 width = document.getElementById("width")
 width.addEventListener('click',  onSliderChange,false)
@@ -101,6 +112,10 @@ coloured = document.getElementById("coloured")
 coloured.addEventListener("click", onClick)
 colorMode = 0
 
+filepath = "/Images/Starting Image-01.jpg/"
+//console.log(filepath)
+
+
 
 
 const definitionName = 'Portraits 2.gh';
@@ -132,38 +147,49 @@ rhino3dm().then(async m => {
 
 async function compute() {
 
+    // clear objects from scene
+     scene.traverse(child => {
+        if (child.type === "Object3D") {
+            scene.remove(child)
+        }
+    })
+
 
     const param1 = new RhinoCompute.Grasshopper.DataTree('Image Width')
     param1.append([0], [width.valueAsNumber])
-    console.log(param1)
+   // console.log(param1)
 
     const param2 = new RhinoCompute.Grasshopper.DataTree('Image Height')
     param2.append([0], [height.valueAsNumber])
-    console.log(param2)
+    //console.log(param2)
 
     const param3 = new RhinoCompute.Grasshopper.DataTree('Image Clarity')
     param3.append([0], [clarity.valueAsNumber])
-    console.log(param3)
+    //console.log(param3)
 
     const param4 = new RhinoCompute.Grasshopper.DataTree('Abstraction')
     param4.append([0], [abstraction.valueAsNumber])
-    console.log(param4)
+    //console.log(param4)
 
     const param5 = new RhinoCompute.Grasshopper.DataTree('Invert Image')
     param5.append([0],[invert])
-    console.log(param5)
+    //console.log(param5)
 
     const param6 = new RhinoCompute.Grasshopper.DataTree('Pixels')
     param6.append([0],[pixels])
-    console.log(param6)
+    //console.log(param6)
 
     const param7 = new RhinoCompute.Grasshopper.DataTree('Color Mode')
     param7.append([0],[colorMode])
-    console.log(param7)
+    //console.log(param7)
 
-    console.log(invert)
-    console.log(pixels)
-    console.log(colorMode)
+    const param8 = new RhinoCompute.Grasshopper.DataTree('Image File')
+    param8.append([0],[filepath])
+    console.log(param8)
+
+    //console.log(invert)
+    //console.log(pixels)
+    //console.log(colorMode)
 
     // clear values
     const trees = []
@@ -174,6 +200,7 @@ async function compute() {
     trees.push(param5)
     trees.push(param6)
     trees.push(param7)
+    //trees.push(param8)
 
 
 
@@ -202,12 +229,7 @@ async function compute() {
     }
 
 
-    // clear objects from scene
-    scene.traverse(child => {
-        if (child.type === "Object3D") {
-            scene.remove(child)
-        }
-    })
+
 
 
     const buffer = new Uint8Array(doc.toByteArray()).buffer
@@ -215,7 +237,7 @@ async function compute() {
         //object.rotation.z = Math.PI
 
         scene.add(object)
-        console.log(scene)
+        //console.log(scene)
         // hide spinner
         document.getElementById('container').style.display = 'none'
 
@@ -241,6 +263,42 @@ function onClick(e){
         colorMode = holder
     }    
     compute()
+}
+
+async function onSend(){
+    //show spinner
+    document.getElementById('container').style.display = 'flex';
+    if (image.files && image.files[0]) {
+        var fileSize;
+        reader = new FileReader();
+        reader.readAsDataURL(image.files[0]);
+        console.log(reader.result)
+        reader.onload = function (event) {
+            var dataUrl = event.target.result, imgs = document.createElement("img")
+            imgs.src = dataUrl
+            fileSize = image.files[0].size
+            filepath = reader.result
+
+            
+        };
+       reader.onerror = function(event) {
+           console.error("File could not be read! Code " + event.target.error.code);
+       };
+
+                     
+       reader.onloadend = function() {
+           alert('Done')
+       }
+        
+        console.log(filepath)
+        
+    }
+    //console.log(dataUrl)
+    console.log(reader)
+    
+    send.disabled = true
+    compute()
+
 }
 
 
@@ -281,7 +339,7 @@ function init() {
     const ambientLight = new THREE.AmbientLight()
     scene.add(ambientLight)
 
-    console.log(scene)
+    //console.log(scene)
 
     animate()
 }
