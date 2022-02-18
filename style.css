@@ -13,7 +13,7 @@ html, body{
 }
 
 /* END OF GENERAL PROPERTIES*/
-/*-----------------------------------------------------------------------------*/
+
 /*LANDING PAGE, CONTAINERS & LOADERS*/
 #landing-page, #container, #container2 {
     margin:0px;
@@ -80,7 +80,7 @@ background-color:black;
     animation-fill-mode: both;
 }
 /* END OF SECTION */
-/*-----------------------------------------------------------------------------*/
+
 /* SIDE WRAPPER*/
 div>#controlbox{
     display:flex;
